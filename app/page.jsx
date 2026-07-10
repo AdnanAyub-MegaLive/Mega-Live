@@ -225,6 +225,7 @@ export default function Home() {
             <a className="nav-link" href="#home">Home</a>
             <a className="nav-link" href="#overview">Overview</a>
             <a className="nav-link" href="#about">About us</a>
+            <a className="nav-link" href="#about">Privacy & Policies</a>
           </div>
           <button
             className="inline-flex min-h-10.5 min-w-32 items-center justify-center rounded-full border border-[#f0b94b]/70 bg-[#03153f]/45 px-6 text-xs font-black uppercase shadow-[0_12px_35px_rgba(3,21,63,0.3)] backdrop-blur-xl transition hover:bg-[#d79722] max-[560px]:min-w-25.5 max-[560px]:px-3.5"
