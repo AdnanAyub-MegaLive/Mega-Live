@@ -5,6 +5,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Modal from "../components/download-modal";
+import AgencyRewards from "../components/agency-rewards";
 
 const icons = {
   gift: "\uD83C\uDF81",
@@ -312,6 +313,7 @@ export default function Home() {
           </article>
         ))}
       </section>
+
       <section
         className="overflow-hidden border-y border-white/10 bg-[linear-gradient(90deg,#03153f,#064ba8,#05bde9,#087fd1,#d79722)] py-5.5"
         aria-label="Mega Chat Live highlights"
@@ -330,6 +332,8 @@ export default function Home() {
           ))}
         </div>
       </section>
+      
+      <AgencyRewards />
       <section className="relative overflow-hidden bg-[radial-gradient(circle_at_15%_8%,rgba(5,189,233,0.30),transparent_25%),radial-gradient(circle_at_84%_34%,rgba(8,127,209,0.35),transparent_25%),linear-gradient(180deg,#03153f_0%,#052c6f_45%,#064ba8_100%)] px-[clamp(22px,5vw,84px)] py-20 max-[560px]:px-4.5 max-[560px]:py-14">
         {features.map((feature, index) => (
           <article
