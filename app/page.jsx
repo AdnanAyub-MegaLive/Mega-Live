@@ -1,9 +1,10 @@
 ﻿"use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Modal from "../components/download-modal";
 
 const icons = {
   gift: "\uD83C\uDF81",
@@ -66,6 +67,7 @@ const stats = [
 
 export default function Home() {
   const root = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -207,13 +209,13 @@ export default function Home() {
           aria-label="Main navigation"
         >
           <a className="flex items-center gap-3 font-black" href="#home">
-            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-white/35 bg-white/15 p-1.5 shadow-[0_12px_34px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+            <span className="grid h-12 w-14 shrink-0 place-items-center backdrop-blur-xl">
               <Image
                 className="h-full w-full object-contain"
                 src="/assets/megalive-logo.png"
                 alt="Mega Chat Live logo"
-                width={200}
-                height={200}
+                width={250}
+                height={250}
                 priority
               />
             </span>
@@ -226,12 +228,21 @@ export default function Home() {
             <a href="#overview">Overview</a>
             <a href="#about">About us</a>
           </div>
-          <a
+          <button
             className="inline-flex min-h-10.5 min-w-32 items-center justify-center rounded-full border border-white/50 bg-[#120a60]/30 px-6 text-xs font-black uppercase shadow-[0_12px_35px_rgba(45,18,142,0.24)] backdrop-blur-xl max-[560px]:min-w-25.5 max-[560px]:px-3.5"
-            href="#download"
+            onClick={() => setIsOpen(true)}
           >
             Download
-          </a>
+          </button>
+           <Modal
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            title="Welcome"
+          >
+            <p className="text-gray-600">
+              This is a reusable modal built with Next.js and Tailwind CSS.
+            </p>
+          </Modal>
         </nav>
         <div className="relative z-10 mx-auto mt-28 grid max-w-295 grid-cols-[minmax(0,1fr)_minmax(320px,0.8fr)] items-center gap-[clamp(36px,6vw,96px)] max-[900px]:mt-17.5 max-[900px]:grid-cols-1">
           <div className="max-w-170">
