@@ -1,1 +1,75 @@
 @import "tailwindcss";
+
+.site-header {
+  min-height: 80px;
+}
+
+.site-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: -500px;
+  width: 500px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #6fdbff,
+    #ffffff,
+    #6fdbff,
+    transparent
+  );
+  box-shadow: 0 0 10px #6fdbff, 0 0 20px rgba(111, 219, 255, 0.5);
+  animation: move-header-line 3s linear infinite;
+  pointer-events: none;
+}
+
+.nav-link {
+  position: relative;
+  padding-block: 8px;
+  transition: color 300ms ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 1px;
+  left: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: #6fdbff;
+  box-shadow: 0 0 9px rgba(111, 219, 255, 0.8);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 300ms ease;
+}
+
+.nav-link:hover,
+.nav-link:focus-visible {
+  color: #6fdbff;
+}
+
+.nav-link:hover::after,
+.nav-link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+@keyframes move-header-line {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(100vw + 500px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header::after {
+    animation: none;
+    left: 0;
+    width: 100%;
+    opacity: 0.45;
+  }
+}

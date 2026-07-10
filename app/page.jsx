@@ -197,15 +197,15 @@ export default function Home() {
   return (
     <main
       ref={root}
-      className="min-h-screen overflow-x-hidden bg-[#120a60] text-white"
+      className="min-h-screen overflow-x-hidden bg-[#03153f] text-white"
     >
       <section
         id="home"
-        className="gradient-field relative min-h-220 overflow-hidden bg-[radial-gradient(circle_at_21%_30%,rgba(255,255,255,0.26),transparent_10%),radial-gradient(circle_at_71%_20%,rgba(255,61,185,0.35),transparent_20%),linear-gradient(130deg,#268cff_0%,#6846ff_42%,#9626ff_70%,#f34fc7_100%)] bg-size-[180%_180%] px-[clamp(22px,5vw,82px)] pb-30 pt-7 after:absolute after:bottom-[-18vw] after:right-[-18vw] after:h-[52vw] after:w-[52vw] after:rounded-full after:bg-white/15 after:blur-xl max-[900px]:min-h-0 max-[900px]:pb-24 max-[560px]:px-4.5 max-[560px]:pb-20 max-[560px]:pt-5"
+        className="gradient-field relative min-h-220 overflow-hidden bg-[radial-gradient(circle_at_21%_30%,rgba(255,255,255,0.24),transparent_10%),radial-gradient(circle_at_71%_20%,rgba(2,207,255,0.38),transparent_22%),linear-gradient(130deg,#03153f_0%,#064ba8_42%,#087fd1_70%,#05bde9_100%)] bg-size-[180%_180%] px-[clamp(22px,5vw,82px)] pb-30 pt-7 after:absolute after:bottom-[-18vw] after:right-[-18vw] after:h-[52vw] after:w-[52vw] after:rounded-full after:bg-white/15 after:blur-xl max-[900px]:min-h-0 max-[900px]:pb-24 max-[560px]:px-4.5 max-[560px]:pb-20 max-[560px]:pt-5"
       >
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-size-[96px_96px] opacity-25 mask-[linear-gradient(to_bottom,#000_0%,transparent_82%)]" />
         <nav
-          className="nav-shell relative z-10 mx-auto flex max-w-295 items-center justify-between gap-6 max-[900px]:items-start"
+          className="nav-shell site-header relative z-10 mx-auto flex max-w-295 items-center justify-between gap-6 max-[900px]:items-start"
           aria-label="Main navigation"
         >
           <a className="flex items-center gap-3 font-black" href="#home">
@@ -219,30 +219,18 @@ export default function Home() {
                 priority
               />
             </span>
-            <span className="max-[560px]:max-w-28 max-[560px]:leading-tight">
-              Mega Chat Live
-            </span>
           </a>
           <div className="flex items-center gap-[clamp(18px,4vw,56px)] text-xs font-black uppercase max-[900px]:hidden">
-            <a href="#home">Home</a>
-            <a href="#overview">Overview</a>
-            <a href="#about">About us</a>
+            <a className="nav-link" href="#home">Home</a>
+            <a className="nav-link" href="#overview">Overview</a>
+            <a className="nav-link" href="#about">About us</a>
           </div>
           <button
-            className="inline-flex min-h-10.5 min-w-32 items-center justify-center rounded-full border border-white/50 bg-[#120a60]/30 px-6 text-xs font-black uppercase shadow-[0_12px_35px_rgba(45,18,142,0.24)] backdrop-blur-xl max-[560px]:min-w-25.5 max-[560px]:px-3.5"
+            className="inline-flex min-h-10.5 min-w-32 items-center justify-center rounded-full border border-[#f0b94b]/70 bg-[#03153f]/45 px-6 text-xs font-black uppercase shadow-[0_12px_35px_rgba(3,21,63,0.3)] backdrop-blur-xl transition hover:bg-[#d79722] max-[560px]:min-w-25.5 max-[560px]:px-3.5"
             onClick={() => setIsOpen(true)}
           >
             Download
           </button>
-           <Modal
-            isOpen={isOpen}
-            onClose={() => setIsOpen(false)}
-            title="Welcome"
-          >
-            <p className="text-gray-600">
-              This is a reusable modal built with Next.js and Tailwind CSS.
-            </p>
-          </Modal>
         </nav>
         <div className="relative z-10 mx-auto mt-28 grid max-w-295 grid-cols-[minmax(0,1fr)_minmax(320px,0.8fr)] items-center gap-[clamp(36px,6vw,96px)] max-[900px]:mt-17.5 max-[900px]:grid-cols-1">
           <div className="max-w-170">
@@ -262,7 +250,7 @@ export default function Home() {
               {["Apple Store", "Google Play", "Huawei", "Android"].map(
                 (store) => (
                   <a
-                    className="store-button inline-flex min-h-10.5 min-w-36.25 items-center justify-center rounded-xl border border-white/50 bg-[#120a60]/30 px-5 font-black shadow-[0_12px_35px_rgba(45,18,142,0.24)] backdrop-blur-xl transition hover:-translate-y-1 hover:scale-[1.03] hover:bg-white/20 max-[560px]:min-w-[calc(50%-8px)]"
+                    className="store-button inline-flex min-h-10.5 min-w-36.25 items-center justify-center rounded-xl border border-[#85eaff]/60 bg-[#03153f]/40 px-5 font-black shadow-[0_12px_35px_rgba(3,21,63,0.3)] backdrop-blur-xl transition hover:-translate-y-1 hover:scale-[1.03] hover:border-[#f0b94b] hover:bg-[#087fd1]/70 max-[560px]:min-w-[calc(50%-8px)]"
                     href="#"
                     key={store}
                   >
@@ -314,7 +302,7 @@ export default function Home() {
             className="benefit-card flex min-h-24 items-center gap-3.5 rounded-lg border border-white/20 bg-white/15 p-5 shadow-[0_22px_70px_rgba(42,140,255,0.20)] backdrop-blur-2xl"
             key={title}
           >
-            <span className="shrink-0 text-[34px] drop-shadow-[0_10px_12px_rgba(255,61,185,0.42)]">
+            <span className="shrink-0 text-[34px] drop-shadow-[0_10px_12px_rgba(5,189,233,0.55)]">
               {icon}
             </span>
             <div>
@@ -325,13 +313,13 @@ export default function Home() {
         ))}
       </section>
       <section
-        className="overflow-hidden border-y border-white/10 bg-[linear-gradient(90deg,#2417a5,#7a2dff,#f34fc7,#268cff)] py-5.5"
+        className="overflow-hidden border-y border-white/10 bg-[linear-gradient(90deg,#03153f,#064ba8,#05bde9,#087fd1,#d79722)] py-5.5"
         aria-label="Mega Chat Live highlights"
       >
         <div className="mx-auto grid max-w-295 grid-cols-2 gap-4.5 px-4.5 md:grid-cols-4">
           {stats.map(([value, label]) => (
             <div
-              className="flex items-baseline gap-2.5 rounded-lg border border-white/20 bg-[#120a60]/35 px-6 py-5 shadow-[0_18px_45px_rgba(0,0,0,0.18)] backdrop-blur-xl"
+              className="flex items-baseline gap-2.5 rounded-lg border border-white/20 bg-[#03153f]/45 px-6 py-5 shadow-[0_18px_45px_rgba(0,0,0,0.18)] backdrop-blur-xl"
               key={value}
             >
               <strong className="text-[34px]">{value}</strong>
@@ -342,7 +330,7 @@ export default function Home() {
           ))}
         </div>
       </section>
-      <section className="relative overflow-hidden bg-[radial-gradient(circle_at_15%_8%,rgba(42,140,255,0.32),transparent_25%),radial-gradient(circle_at_84%_34%,rgba(255,61,185,0.34),transparent_25%),linear-gradient(180deg,#120a60_0%,#20107f_45%,#5520d6_100%)] px-[clamp(22px,5vw,84px)] py-20 max-[560px]:px-4.5 max-[560px]:py-14">
+      <section className="relative overflow-hidden bg-[radial-gradient(circle_at_15%_8%,rgba(5,189,233,0.30),transparent_25%),radial-gradient(circle_at_84%_34%,rgba(8,127,209,0.35),transparent_25%),linear-gradient(180deg,#03153f_0%,#052c6f_45%,#064ba8_100%)] px-[clamp(22px,5vw,84px)] py-20 max-[560px]:px-4.5 max-[560px]:py-14">
         {features.map((feature, index) => (
           <article
             className="feature mx-auto grid min-h-190 max-w-280 grid-cols-[minmax(300px,0.95fr)_minmax(300px,1fr)] items-center gap-[clamp(36px,7vw,120px)] max-[900px]:min-h-0 max-[900px]:grid-cols-1 max-[900px]:gap-4.5 max-[900px]:py-13.5"
@@ -370,13 +358,13 @@ export default function Home() {
             <div
               className={`feature-text relative max-w-132.5 rounded-lg border border-white/15 bg-white/10 p-8 shadow-[0_30px_80px_rgba(0,0,0,0.16)] backdrop-blur-2xl ${feature.align === "left" ? "order-1 max-[900px]:order-0" : ""}`}
             >
-              <p className="mb-3.5 text-[13px] font-black uppercase text-[#16f3ff]">
+              <p className="mb-3.5 text-[13px] font-black uppercase text-[#67e8ff]">
                 {feature.eyebrow}
               </p>
               <h2 className="relative z-10 text-[clamp(40px,5vw,68px)] font-black leading-none max-[560px]:text-[42px]">
                 {feature.title}
               </h2>
-              <span className="mb-6 -mt-3.5 block h-4.25 w-47.5 rounded-full bg-[linear-gradient(90deg,#16f3ff,#ff3db9,rgba(255,61,185,0))]" />
+              <span className="mb-6 -mt-3.5 block h-4.25 w-47.5 rounded-full bg-[linear-gradient(90deg,#05d5ff,#d79722,rgba(215,151,34,0))]" />
               <p className="text-lg leading-[1.75] text-white/80">
                 {feature.copy}
               </p>
@@ -386,34 +374,43 @@ export default function Home() {
       </section>
       <section
         id="about"
-        className="about relative overflow-hidden bg-[radial-gradient(circle_at_18%_20%,rgba(22,243,255,0.30),transparent_24%),radial-gradient(circle_at_82%_18%,rgba(255,61,185,0.34),transparent_26%),linear-gradient(180deg,#5520d6_0%,#7a2dff_45%,#268cff_100%)] px-[clamp(22px,5vw,84px)] pb-24 pt-45 text-center max-[560px]:pt-32.5"
+        className="about relative overflow-hidden bg-[radial-gradient(circle_at_18%_20%,rgba(5,213,255,0.32),transparent_24%),radial-gradient(circle_at_82%_18%,rgba(215,151,34,0.24),transparent_26%),linear-gradient(180deg,#064ba8_0%,#087fd1_45%,#05bde9_100%)] px-[clamp(22px,5vw,84px)] pb-24 pt-45 text-center max-[560px]:pt-32.5"
       >
         <span className="sparkle absolute left-[12%] top-30 h-42.5 w-42.5 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.65),transparent_64%)]" />
         <span className="sparkle absolute bottom-27.5 right-[10%] h-55 w-55 rounded-full bg-[radial-gradient(circle,rgba(22,243,255,0.58),transparent_64%)]" />
-        <div className="absolute left-1/2 -top-32.5 h-77.5 w-[140vw] -translate-x-1/2 -rotate-2 rounded-b-[50%] bg-[#5520d6]" />
+        <div className="absolute left-1/2 -top-32.5 h-77.5 w-[140vw] -translate-x-1/2 -rotate-2 rounded-b-[50%] bg-[#064ba8]" />
         <h2 className="about-title relative z-10 mb-9 text-[clamp(40px,6vw,68px)] font-black">
           About Us
         </h2>
-        <p className="about-copy relative z-10 mx-auto mb-14.5 max-w-240 rounded-lg border border-white/15 bg-[#120a60]/20 p-7 text-[17px] leading-loose text-white/85 shadow-[0_24px_70px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+        <p className="about-copy relative z-10 mx-auto mb-14.5 max-w-240 rounded-lg border border-white/15 bg-[#03153f]/25 p-7 text-[17px] leading-loose text-white/85 shadow-[0_24px_70px_rgba(0,0,0,0.16)] backdrop-blur-xl">
           Mega Chat Live is a group voice chat app built for real human
           community, fun entertainment, and friendly online moments. Meet people
           through voice, build relationships, and discover social talent from
           around the world.
         </p>
         <Image
-          className="about-map relative z-10 w-[min(100%,900px)] rounded-[34px] border border-white/25 shadow-[0_34px_85px_rgba(8,8,54,0.34)]"
+          className="about-map relative m-auto z-10 w-[min(100%,900px)] rounded-[34px] border border-white/25 shadow-[0_34px_85px_rgba(8,8,54,0.34)]"
           src="/assets/hong-kong-map.png"
           alt="Hong Kong office and map"
           width={900}
           height={433}
         />
       </section>
-      <footer className="grid justify-items-center gap-4.5 bg-[linear-gradient(135deg,#268cff,#6846ff,#f34fc7)] px-6 py-15 pb-19 text-center text-sm">
-        <strong className="text-base">Joytune Social Media Co., Limited</strong>
-        <span>hallalive777@gmail.com</span>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Launching Soon!"
+      >
+        <p>
+          The Mega Chat Live app will be live soon. Stay tuned for the launch!
+        </p>
+      </Modal>
+
+      <footer className="grid justify-items-center gap-4.5 border-t border-[#f0b94b]/30 bg-[linear-gradient(135deg,#03153f,#064ba8,#087fd1)] px-6 py-15 pb-19 text-center text-sm">
+        <strong className="text-base">Entertainment Technologies, SMC-PVT</strong>
+        <span>megalive@gmail.com</span>
         <span>
-          RM 1307,13/F, KENBO COMMERCIAL BUILDING 335-339, QUEEN'S ROAD Hong
-          Kong
+          RM 1307,13/F, KENBO COMMERCIAL BUILDING 335-339, China.
         </span>
       </footer>
     </main>
