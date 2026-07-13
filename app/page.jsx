@@ -69,6 +69,18 @@ const stats = [
 export default function Home() {
   const root = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isMenuOpen) return undefined;
+
+    const closeMenu = (event) => {
+      if (event.key === "Escape") setIsMenuOpen(false);
+    };
+
+    document.addEventListener("keydown", closeMenu);
+    return () => document.removeEventListener("keydown", closeMenu);
+  }, [isMenuOpen]);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -228,10 +240,24 @@ export default function Home() {
             <a className="nav-link" href="/privacy-policy">Privacy & Policies</a>
           </div>
           <button
-            className="inline-flex min-h-10.5 min-w-32 items-center justify-center rounded-full border border-[#f0b94b]/70 bg-[#03153f]/45 px-6 text-xs font-black uppercase shadow-[0_12px_35px_rgba(3,21,63,0.3)] backdrop-blur-xl transition hover:bg-[#d79722] max-[560px]:min-w-25.5 max-[560px]:px-3.5"
+            className="inline-flex min-h-10.5 min-w-32 items-center justify-center rounded-full border border-[#f0b94b]/70 bg-[#03153f]/45 px-6 text-xs font-black uppercase shadow-[0_12px_35px_rgba(3,21,63,0.3)] backdrop-blur-xl transition hover:bg-[#d79722] max-[900px]:hidden"
             onClick={() => setIsOpen(true)}
           >
             Download
+          </button>
+          <button
+            type="button"
+            className="hidden h-11 w-11 shrink-0 place-items-center rounded-full border border-white/35 bg-[#03153f]/45 shadow-[0_12px_30px_rgba(3,21,63,0.3)] backdrop-blur-xl transition hover:border-[#6fdbff] hover:bg-white/15 max-[900px]:grid"
+            onClick={() => setIsMenuOpen(true)}
+            aria-label="Open navigation menu"
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-navigation"
+          >
+            <span className="grid gap-1.5" aria-hidden="true">
+              <span className="block h-0.5 w-5 rounded-full bg-white" />
+              <span className="block h-0.5 w-5 rounded-full bg-white" />
+              <span className="block h-0.5 w-5 rounded-full bg-white" />
+            </span>
           </button>
         </nav>
         <div className="relative z-10 mx-auto mt-28 grid max-w-295 grid-cols-[minmax(0,1fr)_minmax(320px,0.8fr)] items-center gap-[clamp(36px,6vw,96px)] max-[900px]:mt-17.5 max-[900px]:grid-cols-1">
@@ -410,6 +436,67 @@ export default function Home() {
           The Mega Chat Live app will be live soon. Stay tuned for the launch!
         </p>
       </Modal>
+
+      <div
+        className={`fixed inset-0 z-60 transition ${isMenuOpen ? "pointer-events-auto visible" : "pointer-events-none invisible"}`}
+        aria-hidden={!isMenuOpen}
+      >
+        <button
+          type="button"
+          className={`absolute inset-0 bg-[#020b22]/75 backdrop-blur-sm transition-opacity duration-300 ${isMenuOpen ? "opacity-100" : "opacity-0"}`}
+          onClick={() => setIsMenuOpen(false)}
+          aria-label="Close navigation menu"
+          tabIndex={isMenuOpen ? 0 : -1}
+        />
+        <aside
+          id="mobile-navigation"
+          className={`absolute right-0 top-0 flex h-full w-[min(86vw,360px)] flex-col border-l border-[#6fdbff]/35 bg-[radial-gradient(circle_at_100%_0%,rgba(5,213,255,0.18),transparent_34%),linear-gradient(180deg,#03153f,#052c6f)] p-6 shadow-[-25px_0_70px_rgba(2,11,34,0.55)] transition-transform duration-500 ease-out ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}
+        >
+          <div className="flex items-center justify-between border-b border-white/15 pb-5">
+            <span className="text-sm font-black uppercase tracking-wider text-[#8be9ff]">Navigation</span>
+            <button
+              type="button"
+              className="grid h-10 w-10 place-items-center rounded-full border border-white/25 bg-white/10 text-2xl transition hover:rotate-90 hover:bg-white/20"
+              onClick={() => setIsMenuOpen(false)}
+              aria-label="Close navigation menu"
+            >
+              &times;
+            </button>
+          </div>
+
+          <nav className="mt-8 grid gap-3" aria-label="Mobile navigation">
+            {[
+              ["Home", "#home"],
+              ["Overview", "#overview"],
+              ["About us", "#about"],
+              ["Privacy & Policies", "/privacy-policy"],
+            ].map(([label, href], index) => (
+              <a
+                className={`rounded-2xl border border-white/15 bg-white/8 px-5 py-4 text-lg font-black transition duration-300 hover:translate-x-1 hover:border-[#6fdbff]/60 hover:bg-white/15 ${isMenuOpen ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"}`}
+                style={{ transitionDelay: isMenuOpen ? `${120 + index * 70}ms` : "0ms" }}
+                href={href}
+                key={href}
+                onClick={() => setIsMenuOpen(false)}
+                tabIndex={isMenuOpen ? 0 : -1}
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
+
+          <button
+            type="button"
+            className="mt-auto min-h-12 rounded-full border border-[#f8d47c] bg-[#d79722] px-6 text-sm font-black uppercase tracking-wider text-[#03153f] shadow-[0_12px_30px_rgba(2,11,34,0.35)] transition hover:-translate-y-0.5 hover:bg-[#f0b94b]"
+            onClick={() => {
+              setIsMenuOpen(false);
+              setIsOpen(true);
+            }}
+            tabIndex={isMenuOpen ? 0 : -1}
+          >
+            Download
+          </button>
+        </aside>
+      </div>
     </main>
   );
 }

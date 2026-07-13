@@ -20,7 +20,7 @@ const privacySections = [
   ["13. Your Rights and Controls", "Depending on your location, you may request access, correction, deletion, portability, restriction, or objection to certain processing. You may also withdraw consent, manage communication preferences, and control microphone, camera, contact, notification, or location permissions through your device settings."],
   ["14. Children’s Privacy", "Mega Chat Live is intended only for users aged 18 or older. We do not knowingly collect personal information from anyone under 18. If you believe an underage person has created an account or provided information, contact us so we can investigate and take appropriate action."],
   ["15. International Processing", "Information may be stored or processed in countries other than the country where you live. Where required, Mega Chat Live uses appropriate safeguards for international transfers and handles information in accordance with applicable data-protection law."],
-  ["16. Policy Changes and Contact", "We may update this Privacy Policy when our practices, services, or legal obligations change. We will update the effective date and provide additional notice where required. Privacy questions or requests may be sent to hallalive777@gmail.com. We may verify your identity before completing a request."],
+  ["16. Policy Changes and Contact", "We may update this Privacy Policy when our practices, services, or legal obligations change. We will update the effective date and provide additional notice where required. Privacy questions or requests may be sent to customer-service@megachat.live. We may verify your identity before completing a request."],
 ];
 
 const termsSections = [
@@ -41,7 +41,7 @@ const termsSections = [
   ["15. Disclaimers and Liability", "The service is provided on an “as available” basis to the extent permitted by law. Mega Chat Live disclaims warranties that may lawfully be excluded. Liability is limited to the maximum extent permitted by applicable law, without limiting consumer or other rights that cannot legally be excluded."],
   ["16. Indemnity and Disputes", "To the extent permitted by law, you are responsible for claims arising from your unlawful use, content, or violation of these terms. Contact support first so the parties can attempt an informal resolution. Nothing in these terms removes dispute rights or remedies that applicable law requires."],
   ["17. General Terms", "If one provision is unenforceable, the remaining provisions continue to apply. Failure to enforce a provision is not a waiver. You may not assign your rights without permission. Mega Chat Live may assign these terms in connection with a reorganization, financing, merger, or transfer of the service."],
-  ["18. Changes and Contact", "Mega Chat Live may revise these terms to reflect service, safety, operational, or legal changes. The updated effective date will appear on this page, and additional notice will be provided where required. Questions may be sent to hallalive777@gmail.com."],
+  ["18. Changes and Contact", "Mega Chat Live may revise these terms to reflect service, safety, operational, or legal changes. The updated effective date will appear on this page, and additional notice will be provided where required. Questions may be sent to customer-service@megachat.live."],
 ];
 
 const theme = {
