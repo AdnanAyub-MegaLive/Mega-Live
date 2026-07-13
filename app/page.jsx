@@ -326,7 +326,7 @@ export default function Home() {
               key={value}
             >
               <strong className="whitespace-nowrap text-[28px] leading-none min-[420px]:text-[32px] md:text-[34px]">{value}</strong>
-              <span className="max-w-full break-words text-[11px] font-extrabold uppercase leading-4 text-white/75 min-[420px]:text-xs md:text-sm">
+              <span className="max-w-full wrap-break-word text-[11px] font-extrabold uppercase leading-4 text-white/75 min-[420px]:text-xs md:text-sm">
                 {label}
               </span>
             </div>

@@ -55,12 +55,12 @@ const theme = {
 function PolicySection({ title, sections, id }) {
   return (
     <section id={id} className={`min-w-0 scroll-mt-6 rounded-2xl border p-4 min-[380px]:p-5 sm:rounded-3xl sm:p-8 ${theme.card}`}>
-      <h2 className={`mb-6 break-words text-2xl font-black min-[380px]:text-3xl sm:mb-8 sm:text-4xl ${theme.accent}`}>{title}</h2>
+      <h2 className={`mb-6 wrap-break-word text-2xl font-black min-[380px]:text-3xl sm:mb-8 sm:text-4xl ${theme.accent}`}>{title}</h2>
       <div className="space-y-7 sm:space-y-8">
         {sections.map(([heading, copy]) => (
           <div key={heading}>
-            <h3 className="mb-2 break-words text-base font-black min-[380px]:text-lg sm:text-xl">{heading}</h3>
-            <p className={`break-words text-[15px] leading-7 sm:text-base sm:leading-8 ${theme.muted}`}>{copy}</p>
+            <h3 className="mb-2 wrap-break-word text-base font-black min-[380px]:text-lg sm:text-xl">{heading}</h3>
+            <p className={`wrap-break-word text-[15px] leading-7 sm:text-base sm:leading-8 ${theme.muted}`}>{copy}</p>
           </div>
         ))}
       </div>
@@ -84,7 +84,7 @@ export default function LegalPolicyPage() {
       <div className="mx-auto max-w-295 space-y-7">
         <header className={`overflow-hidden rounded-3xl border-[#ffd34f] bg-[linear-gradient(135deg,#8d5708,#efbd3c)] px-4 py-8 text-center min-[380px]:px-5 sm:rounded-4xl sm:p-12 ${theme.hero}`}>
           <p className={`mb-3 text-[10px] font-black uppercase tracking-[0.22em] sm:text-xs sm:tracking-[0.3em] ${theme.accent}`}>Legal center</p>
-          <h1 className="break-words text-[clamp(30px,9vw,72px)] font-black leading-[1.02]">Privacy Policy<br /><span className={theme.accent}>&amp; Terms and Conditions</span></h1>
+          <h1 className="wrap-break-word text-[clamp(30px,9vw,72px)] font-black leading-[1.02]">Privacy Policy<br /><span className={theme.accent}>&amp; Terms and Conditions</span></h1>
           <p className={`mx-auto mt-5 max-w-190 text-sm leading-6 sm:mt-6 sm:text-base sm:leading-7 ${theme.muted}`}>Learn how Mega Chat Live protects your information and review the rules that apply when using our services.</p>
           <p className={`mt-4 text-sm ${theme.muted}`}>Effective July 12, 2026</p>
         </header>
