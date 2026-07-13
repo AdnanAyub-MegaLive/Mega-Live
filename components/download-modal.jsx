@@ -27,7 +27,7 @@ export default function Modal({ isOpen, onClose, title, children }) {
       role="presentation"
     >
       <div
-        className="relative w-full max-w-lg overflow-hidden rounded-[32px] border border-[#85eaff]/35 bg-[radial-gradient(circle_at_15%_10%,rgba(5,213,255,0.28),transparent_32%),radial-gradient(circle_at_90%_90%,rgba(215,151,34,0.22),transparent_38%),linear-gradient(145deg,rgba(3,21,63,0.98),rgba(6,75,168,0.98)_48%,rgba(8,127,209,0.97))] p-8 text-center text-white shadow-[0_30px_90px_rgba(2,11,34,0.72)] sm:p-10"
+        className="relative w-full max-w-lg overflow-hidden rounded-4xl border border-[#85eaff]/35 bg-[radial-gradient(circle_at_15%_10%,rgba(5,213,255,0.28),transparent_32%),radial-gradient(circle_at_90%_90%,rgba(215,151,34,0.22),transparent_38%),linear-gradient(145deg,rgba(3,21,63,0.98),rgba(6,75,168,0.98)_48%,rgba(8,127,209,0.97))] p-8 text-center text-white shadow-[0_30px_90px_rgba(2,11,34,0.72)] sm:p-10"
         onClick={(event) => event.stopPropagation()}
         role="dialog"
         aria-modal="true"

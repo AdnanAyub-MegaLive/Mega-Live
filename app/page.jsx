@@ -225,7 +225,7 @@ export default function Home() {
             <a className="nav-link" href="#home">Home</a>
             <a className="nav-link" href="#overview">Overview</a>
             <a className="nav-link" href="#about">About us</a>
-            <a className="nav-link" href="#about">Privacy & Policies</a>
+            <a className="nav-link" href="/privacy-policy">Privacy & Policies</a>
           </div>
           <button
             className="inline-flex min-h-10.5 min-w-32 items-center justify-center rounded-full border border-[#f0b94b]/70 bg-[#03153f]/45 px-6 text-xs font-black uppercase shadow-[0_12px_35px_rgba(3,21,63,0.3)] backdrop-blur-xl transition hover:bg-[#d79722] max-[560px]:min-w-25.5 max-[560px]:px-3.5"
@@ -319,14 +319,14 @@ export default function Home() {
         className="overflow-hidden border-y border-white/10 bg-[linear-gradient(90deg,#03153f,#064ba8,#05bde9,#087fd1,#d79722)] py-5.5"
         aria-label="Mega Chat Live highlights"
       >
-        <div className="mx-auto grid max-w-295 grid-cols-2 gap-4.5 px-4.5 md:grid-cols-4">
+        <div className="mx-auto grid max-w-295 grid-cols-2 gap-3 px-3 min-[420px]:gap-4 min-[420px]:px-4.5 md:grid-cols-4">
           {stats.map(([value, label]) => (
             <div
-              className="flex items-baseline gap-2.5 rounded-lg border border-white/20 bg-[#03153f]/45 px-6 py-5 shadow-[0_18px_45px_rgba(0,0,0,0.18)] backdrop-blur-xl"
+              className="flex min-h-28 min-w-0 flex-col items-center justify-center gap-1 rounded-lg border border-white/20 bg-[#03153f]/45 px-2 py-4 text-center shadow-[0_18px_45px_rgba(0,0,0,0.18)] backdrop-blur-xl min-[420px]:px-4 md:min-h-0 md:flex-row md:items-baseline md:justify-start md:gap-2.5 md:px-6 md:py-5 md:text-left"
               key={value}
             >
-              <strong className="text-[34px]">{value}</strong>
-              <span className="font-extrabold uppercase text-white/75">
+              <strong className="whitespace-nowrap text-[28px] leading-none min-[420px]:text-[32px] md:text-[34px]">{value}</strong>
+              <span className="max-w-full break-words text-[11px] font-extrabold uppercase leading-4 text-white/75 min-[420px]:text-xs md:text-sm">
                 {label}
               </span>
             </div>
@@ -410,14 +410,6 @@ export default function Home() {
           The Mega Chat Live app will be live soon. Stay tuned for the launch!
         </p>
       </Modal>
-
-      <footer className="grid justify-items-center gap-4.5 border-t border-[#f0b94b]/30 bg-[linear-gradient(135deg,#03153f,#064ba8,#087fd1)] px-6 py-15 pb-19 text-center text-sm">
-        <strong className="text-base">Entertainment Technologies, SMC-PVT</strong>
-        <span>megalive@gmail.com</span>
-        <span>
-          RM 1307,13/F, KENBO COMMERCIAL BUILDING 335-339, China.
-        </span>
-      </footer>
     </main>
   );
 }
