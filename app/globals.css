@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+@keyframes roulette-wheel-spin {
+  from { transform: rotate(var(--wheel-from)); }
+  to { transform: rotate(var(--wheel-to)); }
+}
+
+@keyframes roulette-bet-progress {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+.wheel-spinning { animation: roulette-wheel-spin 5s cubic-bezier(.13,.65,.24,1) both; }
+.bet-progress { animation: roulette-bet-progress 3.15s linear both; }
+
 html {
   scroll-behavior: smooth;
 }
