@@ -7,32 +7,33 @@ export const metadata = {
 };
 
 const salaryPolicies = [
-  [1,  "450,000",     "$5.00",     "1.00%",  "$0.08",  "__"],
-  [2,  "900,000",     "$10.00",     "1.00%",  "$0.15",  "__"],
-  [3,  "1,350,000",   "$15.00",     "3.00%",  "$0.45",  "__"],
-  [4,  "2,250,000",   "$25.00",    "3.00%",  "$0.75",  "__"],
-
-  [5,  "5,400,000",   "$60.00",    "4.00%",  "$2.70",   "150K + VIP-1 (3 Days)"],
-  [6,  "8,100,000",   "$90.00",    "4.00%",  "$4.05",   "150K + VIP-1 (5 Days)"],
-  [7,  "10,350,000",  "$115.00",    "6.00%",  "$6.90",   "200K + VIP-1 (7 Days)"],
-
-  [8,  "13,500,000",  "$150.00",    "6.00%",  "$9.00",   "250K + VIP-2 (3 Days)"],
-  [9,  "20,250,000",  "$225.00",   "7.00%",  "$16.88",  "400K + VIP-2 (5 Days)"],
-  [10, "24,750,000",  "$275.00",   "7.00%",  "$20.63",  "500K + VIP-3 (7 Days)"],
-
-  [11, "47,250,000",  "$525.00",   "9.00%",  "$47.25",  "900K + VIP-3 (10 Days)"],
-  [12, "60,750,000",  "$675.00",   "9.00%",  "$60.75",  "1.25M + VIP-3 (14 Days)"],
-
-  [13, "74,250,000",  "$825.00",   "10.00%", "$86.63",  "1.5M + VIP-4 (7 Days)"],
-  [14, "101,700,000", "$1,130.00",   "10.00%", "$118.65", "2M + VIP-4 (10 Days)"],
-  [15, "115,200,000", "$1,280.00",   "12.00%", "$153.60", "2.25M + VIP-4 (14 Days)"],
-  [16, "135,000,000", "$1,500.00",   "12.00%", "$180.00", "2.5M + VIP-4 (21 Days)"],
-
-  [17, "160,200,000", "$1,780.00",   "13.00%", "$240.30", "3M + VIP-5 (10 Days)"],
-  [18, "202,500,000", "$2,250.00", "13.00%", "$303.75", "4M + VIP-5 (15 Days)"],
-  [19, "236,700,000", "$2,630.00", "15.00%", "$394.50", "4.5M + VIP-5 (21 Days)"],
-  [20, "337,500,000", "$3,750.00", "15.00%", "$562.50", "6.5M + VIP-5 (30 Days)"]
+  [1, "450,000", 5, 1, "—"],
+  [2, "900,000", 10, 1, "—"],
+  [3, "1,350,000", 15, 3, "—"],
+  [4, "2,250,000", 25, 3, "—"],
+  [5, "5,400,000", 60, 4, "150K + VIP-1 (3 Days)"],
+  [6, "8,100,000", 90, 4, "150K + VIP-1 (5 Days)"],
+  [7, "10,350,000", 115, 6, "200K + VIP-1 (7 Days)"],
+  [8, "13,500,000", 150, 6, "250K + VIP-2 (3 Days)"],
+  [9, "20,250,000", 225, 7, "400K + VIP-2 (5 Days)"],
+  [10, "24,750,000", 275, 7, "500K + VIP-3 (7 Days)"],
+  [11, "47,250,000", 525, 9, "900K + VIP-3 (10 Days)"],
+  [12, "60,750,000", 675, 9, "1.25M + VIP-3 (14 Days)"],
+  [13, "74,250,000", 825, 10, "1.5M + VIP-4 (7 Days)"],
+  [14, "101,700,000", 1130, 10, "2M + VIP-4 (10 Days)"],
+  [15, "115,200,000", 1280, 12, "2.25M + VIP-4 (14 Days)"],
+  [16, "135,000,000", 1500, 12, "2.5M + VIP-4 (21 Days)"],
+  [17, "160,200,000", 1780, 13, "3M + VIP-5 (10 Days)"],
+  [18, "202,500,000", 2250, 13, "4M + VIP-5 (15 Days)"],
+  [19, "236,700,000", 2630, 15, "4.5M + VIP-5 (21 Days)"],
+  [20, "337,500,000", 3750, 15, "6.5M + VIP-5 (30 Days)"]
 ];
+
+const usd = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  minimumFractionDigits: 2
+});
 
 export default function SalaryPoliciesPage() {
   return (
@@ -50,10 +51,10 @@ export default function SalaryPoliciesPage() {
           <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-size-[72px_72px] opacity-30" />
           <div className="relative">
             <p className="mb-3 text-[10px] font-black uppercase tracking-[0.22em] text-[#67e8ff] sm:text-xs sm:tracking-[0.3em]">Mega Chat Live</p>
-            <h1 className="text-[clamp(32px,9vw,72px)] font-black leading-[1.02] mb-16">Host <span className="text-[#ffd34f]">Salary</span> Policies</h1>
-            {/* <p className="mx-auto mt-5 inline-flex rounded-full border border-[#ffd34f]/60 bg-[#ffd34f]/10 px-4 py-2 text-sm font-black text-[#ffd34f] shadow-[0_0_28px_rgba(215,151,34,0.12)] sm:text-base">
-              1 USD = 200,000 Diamonds
-            </p> */}
+            <h1 className="text-[clamp(32px,9vw,72px)] font-black leading-[1.02]">Host <span className="text-[#ffd34f]">Salary</span> Policies</h1>
+            <p className="mx-auto mt-5 inline-flex rounded-full border border-[#ffd34f]/60 bg-[#ffd34f]/10 px-4 py-2 text-sm font-black text-[#ffd34f] shadow-[0_0_28px_rgba(215,151,34,0.12)] sm:text-base">
+              Salary calculation: 90,000 Target Coins = 1 USD
+            </p>
             <div className="mx-auto mt-3 flex max-w-190 flex-col items-center justify-center gap-2 text-xs font-bold text-white/75 sm:flex-row sm:text-sm">
               <span className="uppercase tracking-[0.14em] text-[#67e8ff]">Recharge rules</span>
               <span className="hidden text-white/30 sm:inline" aria-hidden="true">•</span>
@@ -62,7 +63,7 @@ export default function SalaryPoliciesPage() {
               <span>Through Google: <strong className="text-white">1 USD = 42,000 Coins</strong></span>
             </div>
             <p className="mx-auto mt-5 max-w-190 text-sm leading-6 text-white/75 sm:mt-6 sm:text-base sm:leading-7">
-              Review the Host Salary and Agency tiers, diamond targets, and applicable payouts available through Mega Chat Live.
+              Review the Host Salary and Agency tiers, coin targets, and applicable payouts available through Mega Chat Live.
             </p>
           </div>
         </header>
@@ -70,29 +71,29 @@ export default function SalaryPoliciesPage() {
         <div className="mt-7 overflow-hidden rounded-2xl border border-white/15 bg-[#04102d]/85 shadow-[0_24px_70px_rgba(2,11,34,0.3)] backdrop-blur-xl sm:mt-8 sm:rounded-3xl">
           <div className="border-b border-white/12 px-5 py-4 sm:px-6">
             <h2 className="text-lg font-black sm:text-xl">Host Salary Schedule</h2>
-            <p className="mt-1 text-sm text-white/65">Host Salary and Agency payouts are shown for every diamond target tier.</p>
+            <p className="mt-1 text-sm text-white/65">Target Coins are divided by 90,000 to determine the Amount USD. Agency USD is calculated from that amount and the listed Agency percentage.</p>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full min-w-100 border-collapse text-left">
-              <caption className="sr-only">Host salary and agency policy tiers, diamond targets, rates, and agency payouts</caption>
+              <caption className="sr-only">Host salary and agency policy tiers, coin targets, base dollar amounts, rates, agency payouts, and rewards</caption>
               <thead className="bg-[linear-gradient(90deg,#064ba8,#087fd1,#05bde9)] text-xs uppercase tracking-[0.12em] text-white sm:text-sm">
                 <tr>
                   <th scope="col" className="px-2 py-4 font-semibold">Lv</th>
-                  <th scope="col" className="px-2 py-4 font-semibold">Target in Coins</th>
-                  <th scope="col" className="px-2 py-4 text-right font-semibold">Host Salary</th>
+                  <th scope="col" className="px-2 py-4 font-semibold">Target Coins</th>
+                  <th scope="col" className="px-2 py-4 text-right font-semibold">Amount USD</th>
                   <th scope="col" className="px-2 py-4 font-semibold">Agency %</th>
                   <th scope="col" className="px-2 py-4 text-right font-semibold">Agency USD</th>
                   <th scope="col" className="px-2 py-4 text-right font-semibold">Reward</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/10 text-sm sm:text-base">
-                {salaryPolicies.map(([level, target, hostSalary, agencyRate, agencyUsd, rewardsVips]) => (
+                {salaryPolicies.map(([level, target, amountUsd, agencyRate, rewardsVips]) => (
                   <tr key={level} className="transition-colors hover:bg-white/8">
                     <td className="px-2 py-4 font-semibold text-white">{level}</td>
                     <td className="px-2 py-4 font-medium text-white/80">{target}</td>
-                    <td className="px-2 py-4 text-right font-semibold text-[#67e8ff]">{hostSalary}</td>
-                    <td className="px-2 py-4 font-semibold text-[#67e8ff]">{agencyRate}</td>
-                    <td className="px-2 py-4 text-right font-black text-[#ffd34f]">{agencyUsd}</td>
+                    <td className="px-2 py-4 text-right font-semibold text-[#67e8ff]">{usd.format(amountUsd)}</td>
+                    <td className="px-2 py-4 font-semibold text-[#67e8ff]">{agencyRate.toFixed(2)}%</td>
+                    <td className="px-2 py-4 text-right font-black text-[#ffd34f]">{usd.format(amountUsd * agencyRate / 100)}</td>
                     <td className="px-2 py-4 text-right text-[#67e8ff]">{rewardsVips}</td>
                   </tr>
                 ))}
