@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Modal from "../components/download-modal";
 import AgencyRewards from "../components/agency-rewards";
+
+const playStoreUrl = "https://play.google.com/store/apps/details?id=com.megachat.megalive";
 
 const icons = {
   gift: "\uD83C\uDF81",
@@ -68,7 +69,6 @@ const stats = [
 
 export default function Home() {
   const root = useRef(null);
-  const [isOpen, setIsOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -239,12 +239,12 @@ export default function Home() {
             <a className="nav-link" href="#about">About us</a>
             <a className="nav-link" href="/privacy-policy">Privacy & Policies</a>
           </div>
-          <button
+          <a
             className="inline-flex min-h-10.5 min-w-32 items-center justify-center rounded-full border border-[#f0b94b]/70 bg-[#03153f]/45 px-6 text-xs font-black uppercase shadow-[0_12px_35px_rgba(3,21,63,0.3)] backdrop-blur-xl transition hover:bg-[#d79722] max-[900px]:hidden"
-            onClick={() => setIsOpen(true)}
+            href={playStoreUrl}
           >
             Download
-          </button>
+          </a>
           <button
             type="button"
             className="hidden h-11 w-11 shrink-0 place-items-center rounded-full border border-white/35 bg-[#03153f]/45 shadow-[0_12px_30px_rgba(3,21,63,0.3)] backdrop-blur-xl transition hover:border-[#6fdbff] hover:bg-white/15 max-[900px]:grid"
@@ -427,16 +427,6 @@ export default function Home() {
           height={433}
         />
       </section>
-      <Modal
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        title="Launching Soon!"
-      >
-        <p>
-          The Mega Chat Live app will be live soon. Stay tuned for the launch!
-        </p>
-      </Modal>
-
       <div
         className={`fixed inset-0 z-60 transition ${isMenuOpen ? "pointer-events-auto visible" : "pointer-events-none invisible"}`}
         aria-hidden={!isMenuOpen}
@@ -484,17 +474,16 @@ export default function Home() {
             ))}
           </nav>
 
-          <button
-            type="button"
+          <a
             className="mt-auto min-h-12 rounded-full border border-[#f8d47c] bg-[#d79722] px-6 text-sm font-black uppercase tracking-wider text-[#03153f] shadow-[0_12px_30px_rgba(2,11,34,0.35)] transition hover:-translate-y-0.5 hover:bg-[#f0b94b]"
             onClick={() => {
               setIsMenuOpen(false);
-              setIsOpen(true);
             }}
+            href={playStoreUrl}
             tabIndex={isMenuOpen ? 0 : -1}
           >
             Download
-          </button>
+          </a>
         </aside>
       </div>
     </main>
