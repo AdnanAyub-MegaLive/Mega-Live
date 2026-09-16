@@ -20,15 +20,18 @@ const redNumbers = new Set([
   1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36,
 ]);
 const bets = [
-  { label: "0", payout: "x36", detail: "Green zero", tone: "green" },
-  { label: "1-12", payout: "x3", detail: "First dozen" },
-  { label: "13-24", payout: "x3", detail: "Second dozen" },
-  { label: "25-36", payout: "x3", detail: "Third dozen" },
-  { label: "Red", payout: "x2", detail: "Red pockets", tone: "red" },
-  { label: "Black", payout: "x2", detail: "Black pockets", tone: "dark" },
-  { label: "Odd", payout: "x2", detail: "Odd numbers", tone: "green" },
-  { label: "Even", payout: "x2", detail: "Even numbers", tone: "green" },
+  { label: "0", payout: "x36", multiplier: 36, detail: "Green zero", tone: "green" },
+  { label: "1-12", payout: "x3", multiplier: 3, detail: "First dozen" },
+  { label: "13-24", payout: "x3", multiplier: 3, detail: "Second dozen" },
+  { label: "25-36", payout: "x3", multiplier: 3, detail: "Third dozen" },
+  { label: "Red", payout: "x2", multiplier: 2, detail: "Red pockets", tone: "red" },
+  { label: "Black", payout: "x2", multiplier: 2, detail: "Black pockets", tone: "dark" },
+  { label: "Odd", payout: "x2", multiplier: 2, detail: "Odd numbers", tone: "green" },
+  { label: "Even", payout: "x2", multiplier: 2, detail: "Even numbers", tone: "green" },
 ];
+const betByLabel = Object.fromEntries(bets.map((bet) => [bet.label, bet]));
+const STARTING_BALANCE = 3250;
+const BALANCE_STORAGE_KEY = "mega-roulette-balance";
 
 const toneClasses = {
   default: "from-[#079d75] to-[#006b52]",
@@ -79,12 +82,42 @@ export default function Home() {
   const [secondsRemaining, setSecondsRemaining] =
     useState(BETTING_DURATION);
   const [pendingResult, setPendingResult] = useState(null);
+  const [lastWinAmount, setLastWinAmount] = useState(null);
+  // Real balance the player actually owns, persisted across rounds and page
+  // reloads (client-side only -- see GAME_BACKEND_INTEGRATION_SPEC.md for how
+  // this becomes server-authoritative once a real backend is wired in).
+  // Previously `balance` was recomputed as `3250 - totalBet` every render,
+  // which silently reset to 3250 at the start of every round regardless of
+  // whether the prior round was won or lost -- wins/losses never actually
+  // accumulated, so the game was not playable in any meaningful sense.
+  const [balance, setBalance] = useState(STARTING_BALANCE);
+
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem(BALANCE_STORAGE_KEY);
+      if (stored !== null) {
+        const parsed = Number(stored);
+        if (Number.isFinite(parsed)) setBalance(parsed);
+      }
+    } catch {
+      // localStorage unavailable (private browsing, blocked storage) -- fall
+      // back to the in-memory starting balance for this session.
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(BALANCE_STORAGE_KEY, String(balance));
+    } catch {
+      // Non-fatal: balance still works for the current session in memory.
+    }
+  }, [balance]);
 
   const totalBet = useMemo(
     () => Object.values(placedBets).reduce((sum, amount) => sum + amount, 0),
     [placedBets],
   );
-  const balance = 3250 - totalBet;
+  const availableBalance = balance - totalBet;
   const isSpinning = roundPhase === "spinning";
   const bettingLocked =
     roundPhase !== "betting" || secondsRemaining <= BETTING_LOCK_SECONDS;
@@ -96,7 +129,7 @@ export default function Home() {
   const hasRoundWin = winningMarkets.length > 0;
 
   function addBet(label) {
-    if (bettingLocked || balance < chip) return;
+    if (bettingLocked || availableBalance < chip) return;
     setPlacedBets((current) => ({
       ...current,
       [label]: (current[label] ?? 0) + chip,
@@ -129,6 +162,22 @@ export default function Home() {
     setResult(pendingResult);
     setRoundPhase("result");
     setSecondsRemaining(RESULT_DURATION);
+
+    // Settle the round: the wager was already implicitly reserved out of
+    // availableBalance while betting was open, so here we debit the total
+    // wagered and credit back winnings from the bets that actually hit --
+    // this is the step that was completely missing before, which is why
+    // the balance never tracked real outcomes across rounds.
+    const wagered = Object.values(roundBets).reduce((sum, amount) => sum + amount, 0);
+    const payout = Object.entries(roundBets).reduce((sum, [label, amount]) => {
+      if (!isBetWinner(label, pendingResult)) return sum;
+      const bet = betByLabel[label];
+      return sum + amount * (bet ? bet.multiplier : 0);
+    }, 0);
+    setLastWinAmount(payout > 0 ? payout - wagered : null);
+    if (wagered > 0) {
+      setBalance((current) => current - wagered + payout);
+    }
   }
 
   function startNextRound() {
@@ -136,6 +185,7 @@ export default function Home() {
     setRoundBets({});
     setResult(null);
     setPendingResult(null);
+    setLastWinAmount(null);
     setRoundPhase("betting");
     setSecondsRemaining(BETTING_DURATION);
   }
@@ -228,11 +278,16 @@ export default function Home() {
               Available balance
             </span>
             <strong className="mt-1 block font-mono text-[21px] text-[#fff3d7]">
-              {balance.toLocaleString()}{" "}
+              {availableBalance.toLocaleString()}{" "}
               <small className="text-[.53em] tracking-[.08em] text-[#d7ad57]">
                 MEGA
               </small>
             </strong>
+            {roundPhase === "result" && lastWinAmount !== null && (
+              <span className="mt-1 block font-mono text-[11px] text-[#67e5c4]">
+                +{lastWinAmount.toLocaleString()} MEGA won
+              </span>
+            )}
           </div>
         </div>
 
