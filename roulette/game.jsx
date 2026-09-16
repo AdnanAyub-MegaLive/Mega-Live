@@ -258,7 +258,7 @@ export default function Home() {
               find you.
             </p>
           </div>
-          <div className="hidden min-w-[184px] border-l-2 border-[#dfba5c] bg-white/[.03] px-4 py-3 md:block">
+          <div className="block w-full border-l-2 border-[#dfba5c] bg-white/[.03] px-4 py-2 md:min-w-[184px] md:w-auto md:py-3">
             <span className="block text-[11px] text-[#aaa6ab]">
               Available balance
             </span>
