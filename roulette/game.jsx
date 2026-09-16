@@ -6,32 +6,19 @@ import { BiSolidShare as BiSolidSshare } from "react-icons/bi";
 import { FaUsers } from "react-icons/fa";
 import { HiMiniSpeakerXMark, HiSpeakerWave } from "react-icons/hi2";
 import { MdClose, MdOutlineQuestionMark } from "react-icons/md";
+import {
+  bets,
+  chips,
+  resultColor,
+  isBetWinner,
+  wheelOrder,
+  STARTING_BALANCE,
+} from "./gameLogic";
 
-const chips = [5, 10, 25, 50, 100];
 const BETTING_DURATION = 15;
 const BETTING_LOCK_SECONDS = 3;
 const SPIN_DURATION = 5;
 const RESULT_DURATION = 5;
-const wheelOrder = [
-  0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24,
-  16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26,
-];
-const redNumbers = new Set([
-  1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36,
-]);
-const bets = [
-  { label: "0", payout: "x36", multiplier: 36, detail: "Green zero", tone: "green" },
-  { label: "1-12", payout: "x3", multiplier: 3, detail: "First dozen" },
-  { label: "13-24", payout: "x3", multiplier: 3, detail: "Second dozen" },
-  { label: "25-36", payout: "x3", multiplier: 3, detail: "Third dozen" },
-  { label: "Red", payout: "x2", multiplier: 2, detail: "Red pockets", tone: "red" },
-  { label: "Black", payout: "x2", multiplier: 2, detail: "Black pockets", tone: "dark" },
-  { label: "Odd", payout: "x2", multiplier: 2, detail: "Odd numbers", tone: "green" },
-  { label: "Even", payout: "x2", multiplier: 2, detail: "Even numbers", tone: "green" },
-];
-const betByLabel = Object.fromEntries(bets.map((bet) => [bet.label, bet]));
-const STARTING_BALANCE = 3250;
-const BALANCE_STORAGE_KEY = "mega-roulette-balance";
 
 const toneClasses = {
   default: "from-[#079d75] to-[#006b52]",
@@ -39,34 +26,6 @@ const toneClasses = {
   dark: "from-[#066b59] to-[#00443d]",
   green: "from-[#11a977] to-[#007654]",
 };
-
-function resultColor(number) {
-  if (number === 0) return "Green";
-  return redNumbers.has(number) ? "Red" : "Black";
-}
-
-function isBetWinner(label, number) {
-  switch (label) {
-    case "0":
-      return number === 0;
-    case "1-12":
-      return number >= 1 && number <= 12;
-    case "13-24":
-      return number >= 13 && number <= 24;
-    case "25-36":
-      return number >= 25 && number <= 36;
-    case "Red":
-      return redNumbers.has(number);
-    case "Black":
-      return number > 0 && !redNumbers.has(number);
-    case "Odd":
-      return number > 0 && number % 2 === 1;
-    case "Even":
-      return number > 0 && number % 2 === 0;
-    default:
-      return false;
-  }
-}
 
 export default function Home() {
   const [chip, setChip] = useState(25);
@@ -83,35 +42,36 @@ export default function Home() {
     useState(BETTING_DURATION);
   const [pendingResult, setPendingResult] = useState(null);
   const [lastWinAmount, setLastWinAmount] = useState(null);
-  // Real balance the player actually owns, persisted across rounds and page
-  // reloads (client-side only -- see GAME_BACKEND_INTEGRATION_SPEC.md for how
-  // this becomes server-authoritative once a real backend is wired in).
-  // Previously `balance` was recomputed as `3250 - totalBet` every render,
-  // which silently reset to 3250 at the start of every round regardless of
-  // whether the prior round was won or lost -- wins/losses never actually
-  // accumulated, so the game was not playable in any meaningful sense.
+  const [apiError, setApiError] = useState(null);
+  // The balance now lives server-side (see app/api/roulette/{balance,play}),
+  // carried in a signed cookie the browser cannot forge or edit. This is
+  // still a separate balance from the real MegaLive coin wallet -- that
+  // link requires the backend endpoints in GAME_BACKEND_INTEGRATION_SPEC.md
+  // -- but within this game itself, the result and payout are no longer
+  // something the client computes or can be tricked into computing wrong;
+  // /api/roulette/play is the only source of truth.
   const [balance, setBalance] = useState(STARTING_BALANCE);
+  const [balanceLoaded, setBalanceLoaded] = useState(false);
 
   useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem(BALANCE_STORAGE_KEY);
-      if (stored !== null) {
-        const parsed = Number(stored);
-        if (Number.isFinite(parsed)) setBalance(parsed);
-      }
-    } catch {
-      // localStorage unavailable (private browsing, blocked storage) -- fall
-      // back to the in-memory starting balance for this session.
-    }
+    let cancelled = false;
+    fetch("/api/roulette/balance")
+      .then((res) => res.json())
+      .then((data) => {
+        if (!cancelled && Number.isFinite(data?.balance)) setBalance(data.balance);
+      })
+      .catch(() => {
+        // Network/server unavailable -- keep the in-memory starting balance
+        // so the UI still renders; the next successful /play call will
+        // reconcile with the server's real tracked balance.
+      })
+      .finally(() => {
+        if (!cancelled) setBalanceLoaded(true);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
-
-  useEffect(() => {
-    try {
-      window.localStorage.setItem(BALANCE_STORAGE_KEY, String(balance));
-    } catch {
-      // Non-fatal: balance still works for the current session in memory.
-    }
-  }, [balance]);
 
   const totalBet = useMemo(
     () => Object.values(placedBets).reduce((sum, amount) => sum + amount, 0),
@@ -136,8 +96,7 @@ export default function Home() {
     }));
   }
 
-  function startSpin() {
-    const winningNumber = Math.floor(Math.random() * 37);
+  function rotationFor(winningNumber) {
     const pocketIndex = wheelOrder.indexOf(winningNumber);
     const degreesPerPocket = 360 / wheelOrder.length;
     const currentRotation = ((wheelRotation % 360) + 360) % 360;
@@ -145,15 +104,57 @@ export default function Home() {
     const spinDistance =
       ((targetRotation - currentRotation + 360) % 360) +
       (6 + Math.floor(Math.random() * 3)) * 360;
-    const finalRotation = wheelRotation + spinDistance;
+    return wheelRotation + spinDistance;
+  }
 
+  // Asks the server to actually decide the round. The client only ever
+  // sends the bets it wants to place -- the winning number, the payout, and
+  // the new balance all come back from /api/roulette/play, which is the
+  // only place that logic runs now (see app/api/roulette/play/route.js).
+  // If there are no bets this round, nothing is wagered and there's nothing
+  // for the server to adjudicate, so the wheel still spins for show using a
+  // display-only number with zero balance impact.
+  async function startSpin() {
     setRoundBets(placedBets);
-    setSpinStart(wheelRotation);
-    setSpinEnd(finalRotation);
-    setPendingResult(winningNumber);
     setRoundPhase("spinning");
     setSecondsRemaining(SPIN_DURATION);
     setResult(null);
+    setApiError(null);
+
+    const hasBets = totalBet > 0;
+    if (!hasBets) {
+      const displayNumber = Math.floor(Math.random() * 37);
+      setSpinStart(wheelRotation);
+      setSpinEnd(rotationFor(displayNumber));
+      setPendingResult(displayNumber);
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/roulette/play", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bets: placedBets }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setApiError(data?.error ?? "request_failed");
+        if (Number.isFinite(data?.balance)) setBalance(data.balance);
+        // Server refused the round (e.g. bet exceeds real balance) -- don't
+        // fabricate a spin/result locally, just return straight to betting
+        // so the player can adjust their bet against the real balance.
+        startNextRound();
+        return;
+      }
+      setBalance(data.balance);
+      setLastWinAmount(data.payout > 0 ? data.net : null);
+      setSpinStart(wheelRotation);
+      setSpinEnd(rotationFor(data.result));
+      setPendingResult(data.result);
+    } catch {
+      setApiError("network_error");
+      startNextRound();
+    }
   }
 
   function showResult() {
@@ -162,22 +163,6 @@ export default function Home() {
     setResult(pendingResult);
     setRoundPhase("result");
     setSecondsRemaining(RESULT_DURATION);
-
-    // Settle the round: the wager was already implicitly reserved out of
-    // availableBalance while betting was open, so here we debit the total
-    // wagered and credit back winnings from the bets that actually hit --
-    // this is the step that was completely missing before, which is why
-    // the balance never tracked real outcomes across rounds.
-    const wagered = Object.values(roundBets).reduce((sum, amount) => sum + amount, 0);
-    const payout = Object.entries(roundBets).reduce((sum, [label, amount]) => {
-      if (!isBetWinner(label, pendingResult)) return sum;
-      const bet = betByLabel[label];
-      return sum + amount * (bet ? bet.multiplier : 0);
-    }, 0);
-    setLastWinAmount(payout > 0 ? payout - wagered : null);
-    if (wagered > 0) {
-      setBalance((current) => current - wagered + payout);
-    }
   }
 
   function startNextRound() {
@@ -286,6 +271,13 @@ export default function Home() {
             {roundPhase === "result" && lastWinAmount !== null && (
               <span className="mt-1 block font-mono text-[11px] text-[#67e5c4]">
                 +{lastWinAmount.toLocaleString()} MEGA won
+              </span>
+            )}
+            {apiError && (
+              <span className="mt-1 block font-mono text-[11px] text-[#ff9d91]">
+                {apiError === "insufficient_balance"
+                  ? "Bet exceeded your balance"
+                  : "Connection issue, round skipped"}
               </span>
             )}
           </div>
