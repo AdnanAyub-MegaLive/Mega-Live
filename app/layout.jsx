@@ -1,3 +1,4 @@
+import RouteStore from "../components/game-control/route-store";
 import "./globals.css";
 
 export const metadata = {
@@ -8,7 +9,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="overflow-x-hidden bg-white font-sans text-[#181924] antialiased">{children}</body>
+      <body className="overflow-x-hidden bg-white font-sans text-[#181924] antialiased"><RouteStore>{children}</RouteStore></body>
     </html>
   );
 }
