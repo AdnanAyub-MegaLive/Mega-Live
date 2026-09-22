@@ -15,12 +15,12 @@ export async function POST(request) {
   try {
     sameOrigin(request);
     const body = await jsonBody(request);
-    if (body.action === "launch") await verifiedLaunch(body.token);
+    const launchUser = body.action === "launch" ? await verifiedLaunch(body.token, body.roomId) : null;
     const identity = await requireSession("player");
     await rateLimit(`player:${identity.uid}`, 60, 60);
     const { db } = await database();
     if (body.action === "launch" || body.action === "profile") {
-      const user = await getMegaUser(identity.uid);
+      const user = launchUser || await getMegaUser(identity.megaToken);
       if (String(user?.userId) !== identity.uid)
         throw new HttpError("Mega returned an unexpected player.", 502);
       await db

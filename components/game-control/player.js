@@ -36,7 +36,8 @@ export default function Player({ defaultGame = "lucky-flip" }) {
     setGameId(params.get("game") || defaultGame);
     if (isDemo) return;
     const token = params.get("token");
-    api("player", token ? { action: "launch", token } : { action: "profile" })
+    if (token) { const url = new URL(location.href); url.searchParams.delete("token"); history.replaceState(null, "", url.pathname + url.search); }
+    api("player", token ? { action: "launch", token, roomId: params.get("roomId") } : { action: "profile" })
       .then((p) => {
         setLiveProfile(p);
         if (token) {

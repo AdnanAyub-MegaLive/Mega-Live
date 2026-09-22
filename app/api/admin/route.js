@@ -86,10 +86,8 @@ export async function POST(request) {
           totalRounds,
           integration: {
             database: true,
-            wallet: !!process.env.MEGACHAT_PRIVATE_KEY,
-            launch:
-              !!process.env.MEGA_LAUNCH_VERIFIER_URL &&
-              !!process.env.MEGA_LAUNCH_VERIFIER_SECRET,
+            wallet: true,
+            launch: true,
             live: process.env.LIVE_BETTING_ENABLED === "true",
           },
         },

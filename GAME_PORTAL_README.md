@@ -37,30 +37,29 @@ The original marketing pages and original `roulette/` source remain. The previou
 
 ## Configure the server
 
+The production origin is `https://megachat.live`. Set the values from `.env.example` in your hosting provider's environment settings, or copy it to `.env.production.local` for a self-hosted Next.js server. Environment files containing secrets are excluded from Git. Blank values must be supplied before real mode can function; the example does not contain working credentials. For local real-mode development, use `.env.local` with `APP_ORIGIN=http://localhost:3000`. Rebuild after changing `NEXT_PUBLIC_DEMO_MODE`.
+
+Production routes: `/admin` for management, `/roulette` for Roulette, and `/play?game=lucky-flip` for Lucky Flip. Keep `LIVE_BETTING_ENABLED=false` until launch verification and wallet reconciliation are ready.
+
 - `NEXT_PUBLIC_DEMO_MODE=false`: compile real mode (changing it requires rebuilding).
 - `MONGODB_URI`: Atlas connection string or MongoDB replica set URI. Transactions require a replica set; standalone MongoDB is insufficient.
 - `MONGODB_DB=mega_games`
 - `ADMIN_PASSWORD`: at least 16 characters. Set through your deployment secret manager.
 - `APP_ORIGIN`: exact externally visible HTTPS origin. Used for same-origin POST checks and secure cookies.
 - `MEGACHAT_PRIVATE_KEY`: the provider secret, server-only. Never use `NEXT_PUBLIC_` for it.
-- `MEGA_LAUNCH_VERIFIER_URL` and `MEGA_LAUNCH_VERIFIER_SECRET`: your trusted HTTPS adapter to Mega's actual launch verification contract. This is an adapter contract, NOT an endpoint supplied by Mega.
 - `LIVE_BETTING_ENABLED=false`: leave off until launch verification and reconciliation have been tested against a provider test user.
 
 Build with `npm run build` and start with `npm start` in the Mega-Live project. In this standalone review package, `npm run build` exports a static DEMO, while `npm run build:server` builds the actual Node backend. Never use the static review build as a live wallet backend.
 
-## Launch authentication still required
+## Bearer-token launch authentication
 
-Mega must supply a token proving the player and room identity. A bare UID in a URL is not authentication.
+Mega opens /roulette?token=<ss_token>&roomId=<roomId>. The browser immediately removes the token from the URL and posts it to /api/player. The backend calls open_get_userinfo with Authorization: Bearer <ss_token> and trusts only the user ID returned in a successful provider JSON response. JWT claims are not used to establish identity.
 
-The adapter receives `POST {token}` with your adapter secret in an Authorization header and must return only after verifying Mega's signature/session:
+The provider token is stored only in the MongoDB player session (two-hour expiry); the browser receives an opaque HTTP-only session cookie. Restrict database access to trusted backend operators. Tokens are not included in logs, round records or frontend responses. Every profile refresh and transfer uses the provider token, so provider rejection fails closed. Reopen the game when a token or session expires. The provider has not documented single-use launch semantics, so reusable tokens are supported.
 
-```json
-{"uid":"2036161","roomId":"verified-room-id","nonce":"unique-one-time-launch-id","expiresAt":1789999999}
-```
+roomId is validated for format but remains app-supplied attribution, not authenticated room membership. Do not use it to authorize access to private room data. Shared room rounds are not implemented.
 
-`expiresAt` is Unix seconds, no more than five minutes into the future. Nonces are stored and consumed once. A player session lasts two hours. Do not implement this adapter by merely decoding or trusting URL parameters. Until Mega supplies its verification specification this connection remains incomplete and fails closed.
-
-After launch verification, `/api/player` immediately calls `open_get_userinfo` using the verified UID. It returns the profile, current balance, room and active games.
+For controlled testing only, open_get_gamelists obtains ss_token using the server-only private key and UID/timestamp/sign. Normal app launches supply the token directly; no public token-minting endpoint is exposed here. The legacy MEGA_LAUNCH_VERIFIER_URL and MEGA_LAUNCH_VERIFIER_SECRET are no longer used.
 
 ## Wallet transaction flow
 
@@ -94,4 +93,4 @@ Session, nonce and rate-limit collections use TTL indexes. Rounds and audit hist
 
 `npm test` in this package or `npm run test:games` in Mega-Live runs deterministic rules and mocked wallet tests. No test submits a real coin transaction.
 
-Live MongoDB persistence and live launch-token exchange are not verified until credentials/specification are supplied. No real coin transfer was performed while building this portal.
+Local MongoDB connection and a transaction read were verified. End-to-end app launch, Vercel connectivity and live settlement still require deployment validation. No real coin transfer was performed while building this portal.
